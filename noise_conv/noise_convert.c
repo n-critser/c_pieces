@@ -9,8 +9,8 @@ typedef struct wave_noise_t
     double noise_val;
 } wave_noise_t;
 
-wave_noise_t noise[] = {{20.0 , 3.0},
-                        {80.0 , 4.6}
+wave_noise_t noise[] = {{38.0 , 0.0005538},
+                        {78.0 , 0.000667}
 };
 
 
@@ -31,8 +31,8 @@ noise-power value for a waveform from the one measured with another waveform.
 double noise_convert (double n1, double tau1, double tau2)
 {
     double n2=0.0;
-    fprintf(stdout," tau1:%g        -         tau2:%g\n",tau1,tau2);
-    fprintf(stdout,"ftau1:%g        -        ftau2:%g\n",ftau(tau1),ftau(tau2));
+    /* fprintf(stdout," tau1:%g        -         tau2:%g\n",tau1,tau2); */
+    /* fprintf(stdout,"ftau1:%g        -        ftau2:%g\n",ftau(tau1),ftau(tau2)); */
     
     n2 = (ftau(tau2)/ftau(tau1)) * n1;
     return n2;
@@ -60,19 +60,38 @@ int main(int argc,char**argv)
     outfd = fopen("noise.data", "w");
     double cur_wave=noise[0].width_usec;
     double n1 = noise[0].noise_val;
-    double tau_step=10.0;
+    double tau_step=2.0;
+    double tau1 = 0.0;
+    double tau2= 0.0;
+    double n2 = 0.0;
     
-    fprintf(stdout,"tau1\t\tn1\n");
     while(cur_wave <= noise[1].width_usec)
     {
-        double tau1= cur_wave;
+        tau1= cur_wave;
         cur_wave+=tau_step;
-        double tau2= cur_wave;
-        double n2 = noise_convert(n1,tau1,tau2);
+        tau2= cur_wave;
+        n2 = noise_convert(n1,tau1,tau2);
         fprintf(outfd,"%0.4g\t\t%0.4g\n",tau1,n1);
         n1=n2;
     }
     fclose(outfd);
     graph_results();
+    {
+        /* // difference of avg noise values */
+        /* double vn1=.000666618; */
+        /* tau1=78.0; */
+        /* tau2=38.0; */
+        
+        /* n2= noise_convert(vn1,tau1, tau2); */
+        /* fprintf(stdout,"vertical   : tau1:%0.4g vn1:%g -  tau2:%0.4g vn2:%g\n",tau1,vn1,tau2, n2); */
+        
+        /* double hn1=.000657589; */
+        /* tau1=78.0; */
+        /* tau2=38.0; */
+        
+        /* n2= noise_convert(hn1,tau1, tau2); */
+        /* fprintf(stdout,"horizontal : tau1:%0.4g hn1:%g  -  tau2:%0.4g hn2:%g\n",tau1,hn1,tau2,n2); */
+    }
+    
     return(0);
 }
