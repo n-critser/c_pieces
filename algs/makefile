@@ -1,5 +1,5 @@
- 
-SUBPROJ = numnums noise_conv strbuild threads userio algs grepish file_to_buf memcpy_test
+
+SUBPROJ = merge_sort insertion_sort matrix_mult max_subarray
 
 all:
 	for i in $(SUBPROJ) ;\

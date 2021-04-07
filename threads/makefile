@@ -1,10 +1,21 @@
-
-
-CFLAGS=-Wall -pthread -g
+ 
+SUBPROJ = assorted signals
 
 all:
-	gcc $(CFLAGS) threads_ex.c -o threads_ex
-	gcc $(CFLAGS) jm_mem1.c -o jm_mem1
+	for i in $(SUBPROJ) ;\
+	do \
+	cd $$i ;\
+	make all ;\
+	cd ../ ;\
+	done\
+
 
 clean:
-	rm -f threads_ex jm_mem1
+	for i in $(SUBPROJ) ;\
+	do \
+	cd $$i ;\
+	make clean ;\
+	cd ../ ;\
+	done\
+
+
